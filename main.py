@@ -14,12 +14,11 @@ import os
 import urllib.parse
 locale.setlocale(locale.LC_ALL, '')
 
-
 ############ Boilerplate ###################
 
 app = Flask(__name__)
 app.debug = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://wwxpqfnurujphy:CLantvDbmZf9L3rt9SNbNIijNG@ec2-54-163-245-3.compute-1.amazonaws.com:5432/d51cgpj5ef0npm'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 Bootstrap(app)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -54,8 +53,6 @@ class User(db.Model):
         
     def __repr__(self):
         return '<User %r>' % self.username
-
-        
 
 db.create_all() 
 
@@ -204,30 +201,8 @@ def logout():
     logout_user()
     return redirect(url_for('index')) 
     
-    
-@app.route('/python_games', methods=['GET', 'POST'])
-@login_required
-def python_games():
-    return render_template('python_games.html')
-    
-@app.route('/java_games', methods=['GET', 'POST'])
-@login_required
-def java_games():
-    return render_template('java_games.html')
-    
-@app.route('/block_games', methods=['GET', 'POST'])
-@login_required
-def block_games():
-    return render_template('block_games.html')
-    
+        
 ######## App Startup ###########
 
 if __name__ == '__main__':
 	app.run()
-    
-
-
-   
-    
-    
-    
