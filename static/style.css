@@ -1,0 +1,94 @@
+p {
+
+    
+}
+
+
+h1, h3 { 
+    color: rgb(255, 129, 58);
+
+    
+    }
+    
+.jumbotron {
+    
+    background-color: rgb(255,255,255); 
+
+}
+
+
+img {
+    
+    max-width: 100%;
+    max-height: 100%;
+}
+
+body {
+    
+
+}
+
+.container-fluid, .navbar-inverse, .panel-footer {
+    background-color: rgb(120, 255, 253);
+    border-color: rgb(120, 255, 253);
+}
+
+
+h1.center {
+    text-align: center; 
+}
+
+
+.dropdown-toggle {
+    background-color: rgb(255, 129, 58); 
+    
+}
+
+a:hover {
+    color: rgb(255, 129, 58);
+}
+
+.navbar-nav{
+    color: rgb(255, 129, 58);
+}
+
+.indent{
+    text-align: center;
+}
+
+
+.navbar-inverse .navbar-nav>li>a {
+    color: rgb(255, 129, 58)
+}
+
+.navbar-brand {
+    padding: 5px 15px; 
+}
+
+
+.panel-footer {
+    color: rgb(255, 129, 58);
+}
+
+
+a {
+    color: rgb(255, 129, 58);
+    
+}
+
+
+.col-sm-4 {
+    background-color: rgb(252,248,229);
+}
+
+
+
+
+
+
+
+
+
+
+
+

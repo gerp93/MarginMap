@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %} My Account {% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="jumbotron">
+        
+        <img src="static/Coyote.png">
+            
+            </div>
+</div>
+
+<div class="container">
+
+    <h3 align="center">
+    Welcome, {{ current_user.username }}!
+    </h3>
+</div>
+
+<div class = "container">
+
+<div class="jumbotron">
+        <a class="navbar-brand" href="block_games"><img align="center" src="static/baboon.png"></a>
+</div>
+    
+<p>Blocks is a Python-based graphical language that will allow you to learn programming by clicking and dragging!  If you're new to coding, this would be a GREAT place to start!</p> 
+    
+    
+</div>
+
+<div class="container">
+
+<div class="jumbotron">
+    <a class="navbar-brand" href="python_games"><img align="center" src="static/pathfinder.png"></a>
+</div>
+
+<p>Python is one of the best languages to start your programming journey with! Some languages have a lot of rules about using special symbols, but Python allows a lot more freedom. It is also a “friendly language”, so it can work with a lot of different languages. You can think of Python as a good team player! Best of all, it’s free, so when you get the basics after playing the game, you can download it onto your computer with your parent or guardian’s permission and start experimenting on your own!</p>
+
+</div>
+
+
+<div class="container">
+    
+    <div class="jumbotron">
+        <a class="navbar-brand" href="java_games"><img align="center" src="static/jaguar.png"></a>
+    </div>
+    
+    <p>Java is one of the most popular programming languages in the world! Have you ever heard of “plug-ins”, that are needed to run videos or special graphics on websites? Well, Java is likely behind most of the ones you’ve seen. One big use for Java is mobile apps. That means if you’re good at programming with Java, you can build apps to put on your smartphone or tablets! </p>
+    
+    
+</div>
+
+
+<div class="footer">
+    <p align="center">&copy; Coyote Coders Crew212</p>
+    <p align="center">Interactive Python Activites Powered by Trinket</p>
+</div>
+
+
+{% endblock %}

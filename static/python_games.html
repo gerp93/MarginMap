@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron">
+        
+        <img src="static/pathfinder.png">
+            
+    </div>
+</div>
+
+<br>
+<br>
+<h1> Getting Started</h1>
+<p>Before you get started with the games, let’s learn together all of the features so that you’ll be able to understand the game instructions:
+<br>
+This part of the page that you will use is called the <b>programming environment</b>.
+<br>
+<img src="../static/getting_started.png">
+<br><br>
+The left half of the programming environment is where you enter the code. These are the instructions for the program to follow.
+<img src="../static/starting_code.png">
+<br><br>
+Did you notice that some of the lines of code are written in green? That’s because they are <b>comments</b>, which means that those words are “invisible” to the program. These are useful to leave notes for yourself and other programmers reading the code. You can turn a line into a comment by putting a pound symbol <b>#</b> at the start of the line.
+<br>
+Once you’ve written the code, click the <b>run</b> button to see if it works.
+<br>
+<img src="../static/run_button.png">
+<br><br>
+ If your code is wrong, you will get an <b>error message</b>, that tells you what kind of mistake you made, and you have to fix it and try again.
+ <br>
+ <img src="../static/error_code.png">
+ <br><br>
+ If your code does not have any mistake that stops the program from running, you will see the result in the <b>visualization window</b>.
+ <br>
+ <img src="../static/visualization_window.png">
+</p>
+<br>
+<br>
+<br>
+
+<div class="container">
+<h1>Change Myrtle's Color</h1>
+<br>
+<p>In this game, you can tell our favorite turtle named Myrtle to change her color.  Go to line 6. Inside the parentheses (), write the color that you want Myrtle to be between apostrophes. Here’s an example:
+myrtle.color(‘orange’)
+Other colors you can use: blue, green, purple, yellow. You can also try other colors; some might work but some might not. So you have to experiment!</p>
+<br>
+<br>
+<iframe src="https://trinket.io/embed/python/0fc266245e" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe></div>
+<br>
+<br>
+
+<div class="container">
+<h1>Myrtle Changes Shape</h1>
+<br>
+<p>On line 3, which says “myrtle.shape(“turtle”)”, you can change the word “turtle” to other shapes like “circle” or “square”. You can try others too, but sometimes other shapes don’t work. Find out for yourself which shapes Myrtle likes to turn herself into!</p>
+<br>
+<br>
+    <iframe src="https://trinket.io/embed/python/34f9f88eed" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe></div>
+<br>
+<br>
+
+<div class="container">
+<h1>Moving Myrtle</h1>
+<br>
+<p>Here you can tell Myrtle to moves around in the visualization window. Go to line 7 where the code is written. It should have a comment that says “start here”. In the lines below, you will see instructions for Myrtle. In line 8, it says myrtle.forward(50). The first part, before the period, tells the program who you’re talking about. In this case, we’re talking about Myrtle. After the period, you tell the program which way you want Myrtle to face, forward. Then you might notice the (50). Putting that all together, it means line 8 tells Myrtle to face forward and take 50 steps. What about line 10? That mean Myrtle turns to the left 90 degrees, or 1/4 of the way around the circle.
+Instructions:
+•	Myrtle can walk in two directions: forward and backward
+•	Myrtle can take as many steps as you want her to, but be careful! If you tell her to take more than 200 steps she will walk right off the screen!
+•	Myrtle can turn in two directions: left or right
+•	You can tell Myrtle to turn around as many degrees as you want, but she might get dizzy!
+</p>
+<br>
+<br>
+   <iframe src="https://trinket.io/embed/python/bf0fbc4fad" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</div>
+<br>
+<br>
+
+<div class="container">
+<h1>Myrtle Makes a Square</h1>
+<br>
+<p>If you haven’t played Moving Myrtle yet, now would be a good time to do that! Because you will need to understand how to move her in order to make the square. It helps to read how Myrtle will move on lines 7 to 13, and imagine yourself walking in a square the way she does. Your assignment is to change the size of the square, by changing how many steps Myrtle goes forward. Notice that since a square has 4 sides, Myrtle will walk forward 4 times, each time she needs to walk the same number of steps. If you don’t do that, she won’t end up making a square! Also, she needs to make a 90 degree turn, so leave all the lines that say “myrtle.left(90)” the way they are, unless you want to be goofy and make a different shape. </p>
+<br>
+<br>
+ <iframe src="https://trinket.io/embed/python/809f924949" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe></div>
+<br>
+<br>
+
+<div class="container">
+<h1>Myrtle Changes Speed</h1>
+<br>
+<p>Myrtle is going too fast! Slow her down by lowering the number after myrtle.speed.</p>
+<br>
+<br>
+<iframe src="https://trinket.io/embed/python/f56dc3487c" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</div>
+<br>
+<br>
+
+<div class="container">
+<h1>Myrtle Learns to Write</h1>
+<br>
+<p>Myrtle can write too! In the example below, change user to your name after myrtle.write.</p>
+<br>
+<br>
+   <iframe src="https://trinket.io/embed/python/125c266ec0" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</div>
+<br>
+<br>
+
+<div class="container">
+
+<h1>Myrtle Learns to Draw</h1>
+<br>
+<p>Myrtle sometimes like to draw with her favorite pen. But sometimes she forgets to put the tip of her pen onto her piece of paper. If you hit run, you can she that when she first moves she isn’t using her pen right, but later she remembers! You can tell Myrtle to put her pen down by writing “myrtle.pendown()”, and if you want to make her lift it up again you tell her “myrtle.penup”. Go to line 15 and tell Myrtle to lift her pen up!</p>
+<br>
+<br>
+   <iframe src="https://trinket.io/embed/python/55212ae287" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</div>
+<br>
+<br>
+
+<div class="container">
+<h1>Myrtle Makes a Loop</h1>
+<br>
+<p>Programming can get pretty repetitive at times. To avoid this repetition, we can create a loop. The loop below adds text in each color without having to write the same code over and over again. The color_list code lists the colors that will be added and the code that starts with for loops the colors. In the code below, add another color to the color_list and see what happens.  </p>
+<br>
+<br>
+   <iframe src="https://trinket.io/embed/python/61921c93f0" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</div>
+<br>
+<br>
+
+<div class="container">
+<h1>Myrtle Learns If/Else Statements</h1>
+<br>
+<p>If – else statements that will run certain code based on what a user does. In the example below, a math question is asked. If the user answers the question correctly, it will say it’s correct. If the user answers incorrectly, it will say what the user said and what Myrtle says the answer is. Try editing the equations below. (Make sure to have the same equation in all 3 places!)</p>
+<br>
+<br>
+<iframe src="https://trinket.io/embed/python/dda2faf528" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</div>
+
+{% endblock %}
