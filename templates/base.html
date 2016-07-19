@@ -1,6 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
 
+<<<<<<< HEAD
 <!doctype html>
 <html>
     <head>
@@ -50,6 +51,37 @@
             {% endblock %}
         </div>
 
+=======
+<head>
+{% block head %}
+
+    <title>{% block title %}{% endblock %}| Margin Map</title>
+
+{% block styles %}
+{{ super() }}
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/style.css" type="text/css" charset="utf-8">
+
+{% endblock %}
+
+{% endblock %}
+
+</head>
+
+{% block navbar %}
+<head><title>Title</title></head>
+<div align="center">
+  <h1 style="display:inline-block" class="center">Margin Map</h1>
+  <img style="display:inline-block" src="static/clippy.png"</img>
+</div>
+
+
+{% endblock %}
+
+<body>
+    <div id="content">{% block content %} {% endblock %}</div>
+>>>>>>> 4bdbe22422301e3a340a5ab58f6e6a5da0e3f602
     </body>
     
 </html> 
