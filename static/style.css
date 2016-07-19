@@ -1,20 +1,22 @@
 h1, h2, h3 {
-    color: rgb(105,105,105);
-    display: inline-block;
+    color: rgb(90,90,90);
 }
 
 .jumbotron {
     background-color: rgb(255,255,255);
 }
 
+body {
+ margin: 0;
+ background-image: url('orange-design.png');
+ background-size: 700px 700px;
+ /*background-repeat:no-repeat;*/
+ display: compact;
+ }
+
 img {
     max-width: 100%;
     max-height: 100%;
-}
-
-.container-fluid, .navbar-inverse, .panel-footer {
-    background-color: rgb(255,165,0);
-    border-color: rgb(255,165,0);
 }
 
 h1.center {
@@ -37,19 +39,7 @@ a:hover {
     text-align: center;
 }
 
-.navbar-inverse .navbar-nav>li>a {
-    color: rgb(105,105,105);
-}
-
-.navbar-brand {
-    padding: 5px 15px;
-}
-
 .panel-footer {
-    color: rgb(255, 129, 58);
-}
-
-a {
     color: rgb(255, 129, 58);
 }
 
