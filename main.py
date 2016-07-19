@@ -83,16 +83,19 @@ class Margin(Form):
     pass
 
 class MarginCalculate(Form):
+    client = SelectField(u'Client:', choices=[('Cetera Financial'), ('DiTech'), ('Fairview'), ('Farm Bureau'), ('Guide One'),('Hy-Vee'),('Integrated Behavior Health Network'),('Lifespace Communities'),('Lifetouch'), ('Merrill'), ('MoneyGram'), ('Nationstar'), ('Pioneer'), ('Hybrid'), ('Prime'), ('Principal Financial'), ('Securian'), ('State of Iowa'), ('State of Minnesota'), ('Unity Point Wellmark'), ('Wells Fargo')])
     billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
     payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class BillingCalculate(Form):
+    client = SelectField(u'Client:', choices=[('Cetera Financial'), ('DiTech'), ('Fairview'), ('Farm Bureau'), ('Guide One'),('Hy-Vee'),('Integrated Behavior Health Network'),('Lifespace Communities'),('Lifetouch'), ('Merrill'), ('MoneyGram'), ('Nationstar'), ('Pioneer'), ('Hybrid'), ('Prime'), ('Principal Financial'), ('Securian'), ('State of Iowa'), ('State of Minnesota'), ('Unity Point Wellmark'), ('Wells Fargo')])
     targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class PayCalculate(Form):
+    client = SelectField(u'Client:', choices=[('Cetera Financial'), ('DiTech'), ('Fairview'), ('Farm Bureau'), ('Guide One'),('Hy-Vee'),('Integrated Behavior Health Network'),('Lifespace Communities'),('Lifetouch'), ('Merrill'), ('MoneyGram'), ('Nationstar'), ('Pioneer'), ('Hybrid'), ('Prime'), ('Principal Financial'), ('Securian'), ('State of Iowa'), ('State of Minnesota'), ('Unity Point Wellmark'), ('Wells Fargo')])
     billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
     targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
