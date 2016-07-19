@@ -75,7 +75,7 @@ def content_test(pw):
 @app.route('/index')
 def index():
     form = Login(request.form)
-    return render_template('base.html', form=form)
+    return render_template('index.html', form=form)
 
 
 ######## App Startup ###########
