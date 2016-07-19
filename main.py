@@ -76,6 +76,23 @@ class Margin(Form):
     pass 
 
 
+class MarginCalculate(Form):
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)])
+    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)])
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+
+class BillingCalculate(Form):
+    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)])
+    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)])
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+
+class PayCalculate(Form):
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)])
+    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)])
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+
+
+
 ##### Back End Decorators #####
 
 @app.before_request
