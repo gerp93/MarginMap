@@ -1,12 +1,28 @@
 {% extends "base.html" %}
-
 {% block content %}
 
 <div class="container">
+	{% from "_formhelpers.html" import render_field %}
 	<div class="jumbotron">
-		<h1>Margin Billing Rate</h1>
+		<h1>Calculate Billing Rate</h1>
+		<div class="container">
+				<form method='POST' action="/login" class="form-inline" role="form">
+						<div class="form-group">
+								<dl>
+										{{ render_field(form.targetMargin) }}
+										{{ render_field(form.payRate) }}
+										{{ render_field(form.payType) }}
+								</dl>
+								<p><input type=submit value="Calculate">
+								{% if error == True %}
+								<div class="alert alert-danger">
+									That value is incorrect.
+								</div>
+								{% endif %}
+						</div>
+				</form>
+		</div>
 	</div>
 </div>
-
 
 {% endblock %}
