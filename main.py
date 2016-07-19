@@ -60,14 +60,6 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.pw_hash, password)
 
-class Client(db.Model):
-    __tablename__ = 'client'
-    id = db.Column('id', db.Integer, primary_key = True, autoincrement=1)
-    name = db.Column('name', db.String(20), unique=True)
-    VMS_fee = db.Column('username', db.String(20), unique=False)
-    discount = db.Column('username', db.String(20), unique=False)
-
-
 
 db.create_all()
 
@@ -118,16 +110,6 @@ def index():
 def rando(type):
     if type == "IC":
         return .01
-<<<<<<< HEAD
-        
-    elif type == "Salary":
-        return .4
-        
-    elif type == "W2":
-        return .2 
-    
-@app.route('/calculate_margin', methods=['GET','POST'])
-=======
 
     elif type == "Salary":
         return .4
@@ -136,7 +118,7 @@ def rando(type):
         return .2
 
 @app.route('/calculate_margin')
->>>>>>> 5749527d005575f65c1805776ec5bcb4c2958788
+
 #@login_required
 def calculate_margin():
 
@@ -211,8 +193,8 @@ def calculate_pay_rate():
     type = form.type.data
     target_margin = form.target_margin.data
     client = form.client.data
-    VMS_fee = clients[client]  ####
-    discount = clients[client] ####
+    VMS_fee = clients[client][VMS_fee]  ####
+    discount = clients[client][discount] ####
 
 
     #net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
@@ -271,6 +253,29 @@ def logout():
 if __name__ == '__main__':
     loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
 
-    clients = {}
+    clients = {
+    'Cetera Financial' : {'VMS_fee' : 0, 'discount' : 0 },
+    'DiTech' : {'VMS_fee' : 3.00, 'discount' : 0 },
+    'Fairview' : {'VMS_fee' : 3.00, 'discount' : 0 },
+    'Farm Bureau' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Guide One' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Hy-Vee' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Integrated Behavior Health Network' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Lifespace Communities' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Lifetouch' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Merrill' : {'VMS_fee' : 0, 'discount' : 0 },
+    'MoneyGram' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Nationstar' : {'VMS_fee' : 2.95, 'discount' : 0 },
+    'Pioneer Hybrid' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Prime' : {'VMS_fee' : 0, 'discount' : 3.00 },
+    'Principal Financial' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Securian' : {'VMS_fee' : 0, 'discount' : 0 },
+    'State of Iowa' : {'VMS_fee' : 0, 'discount' : 1.00 },
+    'State of Minnesota' : {'VMS_fee' : 0, 'discount' : 1.00 },
+    'Unity Point' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Wellmark' : {'VMS_fee' : 0, 'discount' : 0 },
+    'Wells Fargo' : {'VMS_fee' : 2.00, 'discount' : 0 }
+    
+    }
 
     app.run()
