@@ -1,5 +1,4 @@
 ############## Imports #################
-
 from flask import Flask, render_template, redirect, request, url_for, g, session, flash, abort
 from flask_bootstrap import Bootstrap
 from wtforms import Form, BooleanField, TextField, PasswordField, validators, DecimalField, SelectField
@@ -26,7 +25,6 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
 
 ############ DB Table Models #############################
 
@@ -61,7 +59,6 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.pw_hash, password)
-        
 
 class Client(db.Model):
     __tablename__ = 'client'
@@ -71,17 +68,16 @@ class Client(db.Model):
     discount = db.Column('username', db.String(20), unique=False)
 
 
-db.create_all()
 
+db.create_all()
 
 ############## WTForms Classes #######################
 
 class Login(Form):
     password = PasswordField('Password <br><i>(Case Sensitive)</i>:', [validators.InputRequired(message=None)])
-    
-class Margin(Form):
-    pass 
 
+class Margin(Form):
+    pass
 
 class MarginCalculate(Form):
     billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
@@ -98,8 +94,6 @@ class PayCalculate(Form):
     targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
-
-
 ##### Back End Decorators #####
 
 @app.before_request
@@ -113,17 +107,18 @@ def load_user(id):
 
 ##### Route Decorators #####
 
-    #////////////// Navigation /////////////////#
+#////////////// Navigation /////////////////#
 
 @app.route('/')
 @app.route('/index')
 def index():
     form = Login(request.form)
     return render_template('index.html', form=form)
-        
+
 def rando(type):
     if type == "IC":
         return .01
+<<<<<<< HEAD
         
     elif type == "Salary":
         return .4
@@ -132,35 +127,42 @@ def rando(type):
         return .2 
     
 @app.route('/calculate_margin', methods=['GET','POST'])
+=======
+
+    elif type == "Salary":
+        return .4
+
+    elif type == "W2":
+        return .2
+
+@app.route('/calculate_margin')
+>>>>>>> 5749527d005575f65c1805776ec5bcb4c2958788
 #@login_required
 def calculate_margin():
 
-    form = MarginCalulate(request.form) 
+    form = MarginCalulate(request.form)
     billing_rate = form.billing_rate.data
-    pay_rate = form.pay_rate.data 
+    pay_rate = form.pay_rate.data
     type = form.type.data
-    client = form.client.data 
+    client = form.client.data
     VMS_fee = clients[client]  ####
     discount = clients[client] ####
-    
+
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
-    
+
     if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
 
     elif type == "Salary":
         loaded_cost = pay_rate * loaded_costs["W2"]
-        
+
     elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
 
     margin_dollars = net_billing_rate / loaded_cost
-    margin_percent = margin_dollars / loaded_cost  
-        
+    margin_percent = margin_dollars / loaded_cost
+
     return render_template('calculate_margin.html', form=form)
-
-
-
 
 @app.route('/calculate_billing_rate', methods=['GET','POST'])
 #@login_required
@@ -170,28 +172,30 @@ def calculate_billing_rate():
     pay_rate = form.pay_rate.data
     type = form.type.data
     target_margin = form.target_margin.data
-    client = form.client.data 
+    client = form.client.data
     VMS_fee = clients[client]  ####
     discount = clients[client] ####
     total_discounts_and_fees = VMS_fee + discount
-    
+
+
     if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
-    
+
     elif type == "Salary":
         loaded_cost = pay_rate * loaded_costs["W2"]
-    
+
+
     elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
-    
-    
-    if total_discounts_and_fees > 0: 
-        billing_rate = loaded_cost / (1 - (target_margin + total_discounts_and_fees)) 
-    
+
+
+    if total_discounts_and_fees > 0:
+        billing_rate = loaded_cost / (1 - (target_margin + total_discounts_and_fees))
+
     elif total_discounts_and_fees < 0:
-        billing_rate = loaded_cost / (1 - target_margin) 
-    
-    
+        billing_rate = loaded_cost / (1 - target_margin)
+
+
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
     margin_dollars = net_billing_rate - loaded_cost
 
@@ -202,35 +206,36 @@ def calculate_billing_rate():
 def calculate_pay_rate():
 
     form = PayCalculate(request.form)
-    
+
     pay_rate = form.pay_rate.data
     type = form.type.data
     target_margin = form.target_margin.data
-    client = form.client.data 
+    client = form.client.data
     VMS_fee = clients[client]  ####
     discount = clients[client] ####
-    
-    #net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount) 
-    
-    
+
+
+    #net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
+
     if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
-    
+
+
     elif type == "Salary":
         loaded_cost = pay_rate * loaded_costs["W2"]
 
     elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
-    
+
+
     if type == "Salary":
         pay_rate = net_billing_rate * (1 - margin) / ((1 + rando(type)) * 2080)
     else:
-        pay_rate == net_billing_rate * (1 - margin) / (1 + rando(type))
-    
+        pay_rate = net_billing_rate * (1 - margin) / (1 + rando(type))
+
     margin_dollars = net_billing_rate - loaded_cost
 
     return render_template('calculate_pay_rate.html', form = form)
-
 
 @app.route('/login', methods=['GET','POST'])
 def login(*args):
@@ -265,5 +270,7 @@ def logout():
 
 if __name__ == '__main__':
     loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
-    clients = {} 
+
+    clients = {}
+
     app.run()
