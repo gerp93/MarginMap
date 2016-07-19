@@ -1,6 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
-
+<!DOCTYPE html>
+<html lang="en"
 
 <head>
 {% block head %}
@@ -17,9 +18,7 @@
 
 {% endblock %}
 
-
 </head>
-
 	
 {% block navbar %}
 <head><title>Title</title></head>
@@ -35,47 +34,22 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
         
-        {% if current_user.is_authenticated %}
-            <ul class="nav navbar-nav">
-                <li {% if request.endpoint == "block_games" %} class="active" {% endif %}><a href="block_games">Baboon Blocks</a></li>
-                <li {% if request.endpoint == "python_games" %} class="active" {% endif %}><a href="python_games">Python Pathfinder</a></li>
-                <li {% if request.endpoint == "java_games" %} class="active" {% endif %}><a href="java_games">Jaguar Java</a></li>
-                
-             
-            </ul>
-        {% endif %}
-
             <div class="nav navbar-nav navbar-right">
             
-            {% if current_user.is_authenticated %}
-            
-            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> Hello, {{ current_user.username }}
-                <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li><a href="account">My Account</a></li>
-                <li><a href="logout">Logout</a></li>
-            </ul>
-            {% else %}
-            <ul class="nav navbar-nav navbar-right">
-                
-            <li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            <li><a href="register">Register</a></li>
-        </ul> 
-            {% endif %}
         </div>
     </div>
     </div>
     </div>
 </nav>
 
-	
 {% endblock %}
 
-
-
-
-
-
-
-
-
+<body>
+    <div id="content">{% block content %} {% endblock %}</div>
+    </body>
+  
+{% block footer %}
+&copy; Copyright 2016 by <a href="http://keyot.com">Keyot, LLC.</a>.
+{% endblock %}
+    
+</html>
