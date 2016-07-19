@@ -2,7 +2,11 @@
 
 from flask import Flask, render_template, redirect, request, url_for, g, session, flash, abort
 from flask_bootstrap import Bootstrap
+
 from wtforms import Form, BooleanField, TextField, PasswordField, validators, DecimalField
+
+from wtforms import Form, BooleanField, TextField, PasswordField, validators, DecimalField, SelectField
+
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
@@ -88,19 +92,19 @@ class Margin(Form):
 
 
 class MarginCalculate(Form):
-    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)])
-    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)])
-    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+    billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
+    payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class BillingCalculate(Form):
-    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)])
-    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)])
-    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+    targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
+    payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class PayCalculate(Form):
-    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)])
-    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)])
-    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+    billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
+    targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 
 
@@ -136,7 +140,7 @@ def rando(type):
         return .2 
     
 @app.route('/calculate_margin')
-@login_required
+#@login_required
 def calculate_margin():
 
     form = MarginCalulate(request.form) 
@@ -164,8 +168,10 @@ def calculate_margin():
     return render_template('calculate_margin.html', form=form)
 
 
+
+
 @app.route('/calculate_billing_rate')
-@login_required
+#@login_required
 def calculate_billing_rate():
     form = BillingCalculate(request.form)
 
@@ -176,7 +182,6 @@ def calculate_billing_rate():
     VMS_fee = clients[client]  ####
     discount = clients[client] ####
     total_discounts_and_fees = VMS_fee + discount
-    
     
     if type = "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
@@ -201,10 +206,10 @@ def calculate_billing_rate():
     return render_template('calculate_billing_rate.html', form=form)
 
 @app.route('/calculate_pay_rate')
-@login_required
+#@login_required
 def calculate_pay_rate():
 
-    form = RateCalculate(request.form)
+    form = PayCalculate(request.form)
     
     pay_rate = form.pay_rate.data
     type = form.type.data
@@ -233,6 +238,7 @@ def calculate_pay_rate():
     margin_dollars = net_billing_rate - loaded_cost
 
     return render_template('calculate_pay_rate.html', form = form)
+
 
 @app.route('/login', methods=['GET','POST'])
 def login(*args):
