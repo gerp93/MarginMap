@@ -1,57 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
 
-<<<<<<< HEAD
-<!doctype html>
-<html>
-    <head>
-        {% block head %}
-        
-        {{ super() }}
-        
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="static/style.css" type="text/css" charset="utf-8">
-        <title>{% block title %}{% endblock %}| Margin Map</title>
-        
-        {% endblock %}
-    </head>
-    
-    <body>
-    
-    
-        {% block navbar %}
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/"><img src="static/clippy.png"</a>
-                        <h2>Margin Map</h2>
-                        </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    
-                    <div class="nav navbar-nav navbar-right">
-                        
-                    </div>
-                </div>
-            </div>
-            </div>
-        </nav>
-        
-        {% endblock %}
-        
-        
-        <div class="container-fluid">{% block content %}{% endblock %}</div>
-        <div class="container-fluid">
-            {% block footer %}
-            &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>.
-            {% endblock %}
-        </div>
 
-=======
 <head>
 {% block head %}
 
@@ -81,7 +31,12 @@
 
 <body>
     <div id="content">{% block content %} {% endblock %}</div>
->>>>>>> 4bdbe22422301e3a340a5ab58f6e6a5da0e3f602
+    
+    
+    {% block footer %}
+    
+    
+
     </body>
     
 </html> 

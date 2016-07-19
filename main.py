@@ -33,39 +33,14 @@ login_manager.login_view = 'login'
 class Login(Form):
     username = TextField('Username <br><i>(Case Sensitive)</i>:', [validators.InputRequired(message=None)])
     password = PasswordField('Password <br><i>(Case Sensitive)</i>:', [validators.InputRequired(message=None)])
+    
+class Margin(Form):
+    pass 
 
 class Register(Form):
     username = username = TextField('Username <br><i>(Case Sensitive)</i>', [validators.InputRequired(message=None)])
     password = PasswordField('Password <br><i>(Must be at least 8 characters with at least one letter and one number.)</i>:', [validators.InputRequired(message=None)])
     confirm_password = PasswordField('Confirm Password:', [validators.InputRequired(message=None)])
-
-############# Functions #################
-
-def content_test(pw):
-    print("pw", pw)
-    pwl = []
-    for character in pw:
-        pwl.append(character)
-    print("list:", pwl)
-
-    letter = False
-    for item in pwl:
-        if item in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']:
-            letter = True
-            break
-
-    number = False
-    for item in pwl:
-        if item in ['0','1', '2', '3', '4', '5', '6', '7', '8', '9']:
-            number = True
-            break
-
-
-    if number == True and letter == True:
-        return True
-    else:
-        return False
-
 
 ##### Route Decorators #####
 
@@ -76,9 +51,114 @@ def content_test(pw):
 def index():
     form = Login(request.form)
     return render_template('index.html', form=form)
+    
+@app.route('margin')
+def margin():
+    form = MarginCalulate(request.form) 
+    billing_rate = form.billing_rate.data
+    pay_rate = form.pay_rate.data 
+    type = form.type.data
+    client = form.client.data 
+    VMS_fee = clients[client]  ####
+    discount = clients[client] ####
+    
+    net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
+    
+    if type = "IC":
+        loaded_cost = pay_rate * loaded_costs["IC"]
 
+    elif type = "Salary":
+        loaded_cost = pay_rate * loaded_costs["W2"]
+        
+    elif type = "W2":
+        loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
+
+    margin_dollars = net_billing_rate / loaded_cost
+    margin_percent = margin_dollars / loaded_cost  
+    
+    return render_template('calculate_margin.html', form=form)
+
+@app.route('needed_billing_rate')
+def needed_billing_rate():
+
+    form = BillingCalculate(request.form)
+
+    pay_rate = form.pay_rate.data
+    type = form.type.data
+    target_margin = form.target_margin.data
+    client = form.client.data 
+    VMS_fee = clients[client]  ####
+    discount = clients[client] ####
+    total_discounts_and_fees = VMS_fee + discount
+    
+    
+    if type = "IC":
+        loaded_cost = pay_rate * loaded_costs["IC"]
+    
+    elif type = "Salary":
+        loaded_cost = pay_rate * loaded_costs["W2"]
+    
+    elif type = "W2":
+        loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
+        
+        
+    if total_discounts_and_fees > 0: 
+        billing_rate = loaded_cost / (1 - (target_margin + total_discounts_and_fees)) 
+    
+    elif total_discounts_and_fees < 0:
+        billing_rate = loaded_cost / (1 - target_margin) 
+    
+    
+    net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
+    margin_dollars = net_billing_rate - loaded_cost
+    
+
+@app.route('pay_rate')
+def pay_rate():
+
+    form = RateCalculate(request.form)
+
+    pay_rate = form.pay_rate.data
+    type = form.type.data
+    target_margin = form.target_margin.data
+    client = form.client.data 
+    VMS_fee = clients[client]  ####
+    discount = clients[client] ####
+    
+    #net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount) 
+    
+    
+    if type = "IC":
+        loaded_cost = pay_rate * loaded_costs["IC"]
+    
+    elif type = "Salary":
+        loaded_cost = pay_rate * loaded_costs["W2"]
+    
+    elif type = "W2":
+        loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
+        
+    if type = "Salary":
+        pay_rate = net_billing_rate * (1 - margin) / ((1 + rando(type)) * 2080)
+    else:
+        pay_rate = net_billing_rate * (1 - margin) / (1 + rando(type))
+        
+    margin_dollars = net_billing_rate - loaded_cost
+    
+    
+    
+def rando(type):
+    if type = "IC":
+        return .01
+        
+    elif type = "Salary":
+        return .4
+        
+    elif type = "W2":
+        return .2 
+    
 
 ######## App Startup ###########
 
 if __name__ == '__main__':
+    loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
 	app.run()
