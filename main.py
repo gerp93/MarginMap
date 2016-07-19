@@ -72,6 +72,21 @@ db.create_all()
 class Login(Form):
     password = PasswordField('Password <br><i>(Case Sensitive)</i>:', [validators.InputRequired(message=None)])
 
+class MarginCalculate(Form):
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)])
+    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)])
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+
+class BillingCalculate(Form):
+    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)])
+    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)])
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+
+class PayCalculate(Form):
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)])
+    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)])
+    payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')])
+
 ############# Functions #################
 
 def content_test(pw):
