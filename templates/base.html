@@ -1,9 +1,12 @@
 {% extends "bootstrap/base.html" %}
 
+<!DOCTYPE html>
+<html lang="en"
+
 <head>
 {% block head %}
 
-    <title>{% block title %}{% endblock %}| Margin Map</title>
+    <title>{% block title %}{% endblock %}| Coyote Coders</title>
 
 {% block styles %}
 {{ super() }}
@@ -12,6 +15,7 @@
 <link rel="stylesheet" href="static/style.css" type="text/css" charset="utf-8">
 
 {% endblock %}
+
 {% endblock %}
 
 </head>
@@ -20,16 +24,32 @@
 <head><title>Title</title></head>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
-        <!-- <div class="navbar-header"> -->
-            <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button> -->
-            <a class="navbar-brand" href="/"><img src="static/clippy.png"</a>
-        <!-- </div> -->
-        <h1 float="right">Margin Map</h1>
+            </button>
+            <a class="navbar-brand" href="/"><img src="static/coyote_stacked.png"</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+
+            <div class="nav navbar-nav navbar-right">
+
+        </div>
+    </div>
+    </div>
     </div>
 </nav>
 
 {% endblock %}
+
+<body>
+    <div id="content">{% block content %} {% endblock %}</div>
+    </body>
+
+{% block footer %}
+&copy; Copyright 2016 by <a href="http://keyot.com">Keyot, LLC.</a>.
+{% endblock %}
+
+</html>
