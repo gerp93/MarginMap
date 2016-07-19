@@ -61,8 +61,19 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.pw_hash, password)
+        
 
-
+class Client(db.model):
+    __tablename__ = 'client'
+    id = db.Column('id', db.Integer, primary_key = True, autoincrement=1)
+    name = db.Column('name', db.String(20), unique=True)
+    VMS_fee = db.Column('username', db.String(20), unique=False)
+    discount = db.Column('username', db.String(20), unique=False)
+    
+    def __init__(self, name, VMS_fee, discount):
+        self.name = name
+        self.VMS_fee = VMS_fee
+        self.discount = discount
 
 db.create_all()
 
@@ -187,13 +198,13 @@ def calculate_billing_rate():
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
     margin_dollars = net_billing_rate - loaded_cost
 
-    return render_template('calculate_billing_rate.html')
+    return render_template('calculate_billing_rate.html', form=form)
 
 @app.route('/calculate_pay_rate')
 @login_required
 def calculate_pay_rate():
 
-form = RateCalculate(request.form)
+    form = RateCalculate(request.form)
     
     pay_rate = form.pay_rate.data
     type = form.type.data
@@ -221,7 +232,7 @@ form = RateCalculate(request.form)
     
     margin_dollars = net_billing_rate - loaded_cost
 
-    return render_template('calculate_pay_rate.html')
+    return render_template('calculate_pay_rate.html', form = form)
 
 @app.route('/login', methods=['GET','POST'])
 def login(*args):
