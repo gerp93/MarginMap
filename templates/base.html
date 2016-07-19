@@ -6,7 +6,7 @@
 <head>
 {% block head %}
 
-    <title>{% block title %}{% endblock %}| Margin Map</title>
+    <title>{% block title %}{% endblock %}| Margin Math</title>
 
 {% block styles %}
 {{ super() }}
@@ -22,10 +22,28 @@
 
 {% block navbar %}
 <head><title>Title</title></head>
-<div align="center">
-  <h1 style="display:inline-block" class="center">Margin Map</h1>
-  <img style="display:inline-block" src="static/clippy.png"</img>
-</div>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="static/clippy.png"</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                <li>Margin Math</li>
+                <li {% if request.endpoint == "calculate_margin" %} class="active" {% endif %}><a href="calculate_margin">Calculate Margin</a></li>
+                <li {% if request.endpoint == "calculate_billing_rate" %} class="active" {% endif %}><a href="calculate_billing_rate">Calculate Billing Rate</a></li>
+                <li {% if request.endpoint == "calculate_pay_rate" %} class="active" {% endif %}><a href="calculate_pay_rate">Calculate Pay Rate</a></li>
+            </ul>
+        </div>
+    </div>
+    </div>
+    </div>
+</nav>
 
 
 {% endblock %}

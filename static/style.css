@@ -3,7 +3,7 @@ h1, h2, h3 {
 }
 
 .jumbotron {
-    background-color: rgb(255,255,255);
+    background-color:rgb(255,199,112);
 }
 
 body {
@@ -41,8 +41,4 @@ a:hover {
 
 .panel-footer {
     color: rgb(255, 129, 58);
-}
-
-.col-sm-4 {
-    background-color: rgb(252,248,229);
 }

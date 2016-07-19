@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %} Welcome {% endblock %}
 
-<div class="container">
-	<div class="jumbotron">
-		<div class="container">
-		<h1>Margin Math</h1>
-		<p>Log in and choose a calculator to get started!</p>
+{% block content %}
+<div align="center" class="container">
+<div class="jumbotron container">
 
     {% if not current_user.is_authenticated %}
+
+    <div class="col-sm-4">
+
         {% from "_formhelpers.html" import render_field %}
         <div class="col-md-5">
             <form method='POST' action="/login" class="form-inline" role="form">
@@ -26,8 +27,10 @@
             </form>
         </div>
     </div>
+    <br>
+    <br>
 </div>
-</div>
+
 
 {% endif %}
 
