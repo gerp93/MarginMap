@@ -2,11 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, url_for, g, session, flash, abort
 from flask_bootstrap import Bootstrap
-
-from wtforms import Form, BooleanField, TextField, PasswordField, validators, DecimalField
-
 from wtforms import Form, BooleanField, TextField, PasswordField, validators, DecimalField, SelectField
-
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
@@ -67,17 +63,13 @@ class User(db.Model):
         return check_password_hash(self.pw_hash, password)
         
 
-class Client(db.model):
+class Client(db.Model):
     __tablename__ = 'client'
     id = db.Column('id', db.Integer, primary_key = True, autoincrement=1)
     name = db.Column('name', db.String(20), unique=True)
     VMS_fee = db.Column('username', db.String(20), unique=False)
     discount = db.Column('username', db.String(20), unique=False)
-    
-    def __init__(self, name, VMS_fee, discount):
-        self.name = name
-        self.VMS_fee = VMS_fee
-        self.discount = discount
+
 
 db.create_all()
 
@@ -130,16 +122,16 @@ def index():
     return render_template('index.html', form=form)
         
 def rando(type):
-    if type = "IC":
+    if type == "IC":
         return .01
         
-    elif type = "Salary":
+    elif type == "Salary":
         return .4
         
-    elif type = "W2":
+    elif type == "W2":
         return .2 
     
-@app.route('/calculate_margin')
+@app.route('/calculate_margin', methods=['GET','POST'])
 #@login_required
 def calculate_margin():
 
@@ -153,13 +145,13 @@ def calculate_margin():
     
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
     
-    if type = "IC":
+    if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
 
-    elif type = "Salary":
+    elif type == "Salary":
         loaded_cost = pay_rate * loaded_costs["W2"]
         
-    elif type = "W2":
+    elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
 
     margin_dollars = net_billing_rate / loaded_cost
@@ -170,7 +162,7 @@ def calculate_margin():
 
 
 
-@app.route('/calculate_billing_rate')
+@app.route('/calculate_billing_rate', methods=['GET','POST'])
 #@login_required
 def calculate_billing_rate():
     form = BillingCalculate(request.form)
@@ -183,13 +175,13 @@ def calculate_billing_rate():
     discount = clients[client] ####
     total_discounts_and_fees = VMS_fee + discount
     
-    if type = "IC":
+    if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
     
-    elif type = "Salary":
+    elif type == "Salary":
         loaded_cost = pay_rate * loaded_costs["W2"]
     
-    elif type = "W2":
+    elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
     
     
@@ -205,7 +197,7 @@ def calculate_billing_rate():
 
     return render_template('calculate_billing_rate.html', form=form)
 
-@app.route('/calculate_pay_rate')
+@app.route('/calculate_pay_rate', methods=['GET','POST'])
 #@login_required
 def calculate_pay_rate():
 
@@ -221,19 +213,19 @@ def calculate_pay_rate():
     #net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount) 
     
     
-    if type = "IC":
+    if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
     
-    elif type = "Salary":
+    elif type == "Salary":
         loaded_cost = pay_rate * loaded_costs["W2"]
 
-    elif type = "W2":
+    elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
     
-    if type = "Salary":
+    if type == "Salary":
         pay_rate = net_billing_rate * (1 - margin) / ((1 + rando(type)) * 2080)
     else:
-        pay_rate = net_billing_rate * (1 - margin) / (1 + rando(type))
+        pay_rate == net_billing_rate * (1 - margin) / (1 + rando(type))
     
     margin_dollars = net_billing_rate - loaded_cost
 
@@ -274,4 +266,4 @@ def logout():
 if __name__ == '__main__':
     loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
     clients = {} 
-	app.run()
+    app.run()
