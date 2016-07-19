@@ -9,6 +9,7 @@
 				<form method='POST' action="/login" class="form-inline" role="form">
 						<div class="form-group">
 								<dl>
+										{{ render_field(form.client) }}
 										{{ render_field(form.billingRate) }}
 										{{ render_field(form.payRate) }}
 										{{ render_field(form.payType) }}
@@ -21,6 +22,12 @@
 								{% endif %}
 						</div>
 				</form>
+				<div class="container">
+					<h4>Net Billing Rate: $</h4>
+					<h4>Loaded Cost: $</h4>
+					<h4>Margin ($):</h4>
+					<h4>Margin (%):</h4>
+				</div>
 		</div>
 	</div>
 </div>
