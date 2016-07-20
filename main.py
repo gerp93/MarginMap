@@ -11,11 +11,11 @@ import random
 import locale
 import psycopg2
 import os
+import decimal
 import urllib.parse
 locale.setlocale(locale.LC_ALL, '')
 
 ############ Boilerplate ###################
-
 app = Flask(__name__)
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -27,7 +27,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 ############ DB Table Models #############################
-
 class User(db.Model):
     __tablename__ =  'user'
     id = db.Column('id', db.Integer, primary_key = True, autoincrement=1)
@@ -64,7 +63,6 @@ class User(db.Model):
 db.create_all()
 
 ############## WTForms Classes #######################
-
 class Login(Form):
     password = PasswordField('Password <br><i>(Case Sensitive)</i>:', [validators.InputRequired(message=None)])
 
@@ -72,25 +70,24 @@ class Margin(Form):
     pass
 
 class MarginCalculate(Form):
-    client = SelectField(u'Client:', choices=[('Cetera Financial'), ('DiTech'), ('Fairview'), ('Farm Bureau'), ('Guide One'),('Hy-Vee'),('Integrated Behavior Health Network'),('Lifespace Communities'),('Lifetouch'), ('Merrill'), ('MoneyGram'), ('Nationstar'), ('Pioneer'), ('Hybrid'), ('Prime'), ('Principal Financial'), ('Securian'), ('State of Iowa'), ('State of Minnesota'), ('Unity Point Wellmark'), ('Wells Fargo')])
+    client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
     billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
     payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class BillingCalculate(Form):
-    client = SelectField(u'Client:', choices=[('Cetera Financial'), ('DiTech'), ('Fairview'), ('Farm Bureau'), ('Guide One'),('Hy-Vee'),('Integrated Behavior Health Network'),('Lifespace Communities'),('Lifetouch'), ('Merrill'), ('MoneyGram'), ('Nationstar'), ('Pioneer'), ('Hybrid'), ('Prime'), ('Principal Financial'), ('Securian'), ('State of Iowa'), ('State of Minnesota'), ('Unity Point Wellmark'), ('Wells Fargo')])
+    client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
     targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class PayCalculate(Form):
-    client = SelectField(u'Client:', choices=[('Cetera Financial'), ('DiTech'), ('Fairview'), ('Farm Bureau'), ('Guide One'),('Hy-Vee'),('Integrated Behavior Health Network'),('Lifespace Communities'),('Lifetouch'), ('Merrill'), ('MoneyGram'), ('Nationstar'), ('Pioneer'), ('Hybrid'), ('Prime'), ('Principal Financial'), ('Securian'), ('State of Iowa'), ('State of Minnesota'), ('Unity Point Wellmark'), ('Wells Fargo')])
+    client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
     billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
     targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 ##### Back End Decorators #####
-
 @app.before_request
 def before_request():
     g.user = current_user
@@ -120,16 +117,23 @@ def rando(type):
     elif type == "W2":
         return .2
 
-@app.route('/calculate_margin')
+@app.route('/calculate_margin', methods=['GET','POST'])
 
 #@login_required
 def calculate_margin():
 
     form = MarginCalculate(request.form)
+
+    if request.method == 'GET':
+        return render_template('calculate_margin.html', form=form)
+        
+    
     billing_rate = form.billingRate.data
     pay_rate = form.payRate.data
     type = form.payType.data
     client = form.client.data
+    print(form.client.data)
+    print(clients[client]['VMS_fee'])
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
 
@@ -139,15 +143,15 @@ def calculate_margin():
         loaded_cost = pay_rate * loaded_costs["IC"]
 
     elif type == "Salary":
-        loaded_cost = pay_rate * loaded_costs["W2"]
+        loaded_cost = float(pay_rate) * loaded_costs["W2"] ########
 
     elif type == "W2":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
 
-    margin_dollars = net_billing_rate / loaded_cost
+    margin_dollars = float(net_billing_rate) / loaded_cost
     margin_percent = margin_dollars / loaded_cost
 
-    return render_template('calculate_margin.html', form=form)
+    return render_template('calculate_margin.html', form=form, margin_dollars=margin_dollars, margin_percent=margin_percent, net_billing_rate=net_billing_rate, loaded_cost=loaded_cost)
 
 @app.route('/calculate_billing_rate', methods=['GET','POST'])
 #@login_required
@@ -155,7 +159,7 @@ def calculate_billing_rate():
     form = BillingCalculate(request.form)
 
     pay_rate = form.payRate.data
-    type = form.type.data
+    type = form.payType.data
     target_margin = form.target_margin.data
     client = form.client.data
     VMS_fee = clients[client][VMS_fee]  ####
@@ -193,8 +197,8 @@ def calculate_pay_rate():
     form = PayCalculate(request.form)
 
     pay_rate = form.payRate.data
-    type = form.type.data
-    target_margin = form.target_margin.data
+    type = form.payType.data
+    target_margin = form.targetMargin.data
     client = form.client.data
     VMS_fee = clients[client][VMS_fee]  ####
     discount = clients[client][discount] ####
@@ -252,7 +256,6 @@ def logout():
     return redirect(url_for('index'))
 
 ######## App Startup ###########
-
 if __name__ == '__main__':
     loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
 

@@ -6,7 +6,7 @@
 	<div class="jumbotron">
 		<h1>Calculate Margin</h1>
 		<div class="container">
-				<form method='POST' action="/login" class="form-inline" role="form">
+				<form method='POST' action="/calculate_margin" class="form-inline" role="form">
 						<div class="form-group">
 								<dl>
 										{{ render_field(form.client) }}
@@ -23,10 +23,10 @@
 						</div>
 				</form>
 				<div class="container">
-					<h4>Net Billing Rate: $</h4>
-					<h4>Loaded Cost: $</h4>
-					<h4>Margin ($):</h4>
-					<h4>Margin (%):</h4>
+					<h4>Net Billing Rate: $ {{ net_billing_rate }} </h4>
+					<h4>Loaded Cost: $ {{ loaded_cost }}</h4> 
+					<h4>Margin ($): {{ margin_dollars }}</h4>
+					<h4>Margin (%): {{ margin_percent }}</h4>
 				</div>
 		</div>
 	</div>
