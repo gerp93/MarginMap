@@ -125,13 +125,13 @@ def rando(type):
 #@login_required
 def calculate_margin():
 
-    form = MarginCalulate(request.form)
-    billing_rate = form.billing_rate.data
-    pay_rate = form.pay_rate.data
-    type = form.type.data
+    form = MarginCalculate(request.form)
+    billing_rate = form.billingRate.data
+    pay_rate = form.payRate.data
+    type = form.payType.data
     client = form.client.data
-    VMS_fee = clients[client]  ####
-    discount = clients[client] ####
+    VMS_fee = clients[client]['VMS_fee']  ####
+    discount = clients[client]['discount'] ####
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
 
@@ -154,12 +154,12 @@ def calculate_margin():
 def calculate_billing_rate():
     form = BillingCalculate(request.form)
 
-    pay_rate = form.pay_rate.data
+    pay_rate = form.payRate.data
     type = form.type.data
     target_margin = form.target_margin.data
     client = form.client.data
-    VMS_fee = clients[client]  ####
-    discount = clients[client] ####
+    VMS_fee = clients[client][VMS_fee]  ####
+    discount = clients[client][discount] ####
     total_discounts_and_fees = VMS_fee + discount
 
 
@@ -192,7 +192,7 @@ def calculate_pay_rate():
 
     form = PayCalculate(request.form)
 
-    pay_rate = form.pay_rate.data
+    pay_rate = form.payRate.data
     type = form.type.data
     target_margin = form.target_margin.data
     client = form.client.data
