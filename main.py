@@ -86,7 +86,43 @@ def before_request():
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
+    
+##### Helper Functions ######
 
+
+def return_loaded_costs():
+    
+    return {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
+ 
+    
+def return_clients():       
+             
+    return {
+        'Cetera Financial' : {'VMS_fee' : 0, 'discount' : 0 },
+        'DiTech' : {'VMS_fee' : .03, 'discount' : 0 },
+        'Fairview' : {'VMS_fee' : .03, 'discount' : 0 },
+        'Farm Bureau' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Guide One' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Hy-Vee' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Integrated Behavior Health Network' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Lifespace Communities' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Lifetouch' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Merrill' : {'VMS_fee' : 0, 'discount' : 0 },
+        'MoneyGram' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Nationstar' : {'VMS_fee' : .0295, 'discount' : 0 },
+        'Pioneer Hybrid' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Prime' : {'VMS_fee' : 0, 'discount' : .03 },
+        'Principal Financial' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Securian' : {'VMS_fee' : 0, 'discount' : 0 },
+        'State of Iowa' : {'VMS_fee' : 0, 'discount' : .01 },
+        'State of Minnesota' : {'VMS_fee' : 0, 'discount' : .01 },
+        'Unity Point' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Wellmark' : {'VMS_fee' : 0, 'discount' : 0 },
+        'Wells Fargo' : {'VMS_fee' : .02, 'discount' : 0 }
+        
+        }    
+    
+    
 ##### Route Decorators #####
 
 #////////////// Navigation /////////////////#
@@ -122,6 +158,8 @@ def calculate_margin():
     type = form.payType.data
     client = form.client.data
     print(form.client.data)
+    clients = return_clients()
+    loaded_costs = return_loaded_costs()
 
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
@@ -160,6 +198,8 @@ def calculate_billing_rate():
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
     total_discounts_and_fees = VMS_fee + discount
+    clients = return_clients()
+    loaded_costs = return_loaded_costs()
 
 
     if type == "IC":
@@ -205,6 +245,8 @@ def calculate_pay_rate():
     client = form.client.data
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
+    clients = return_clients()
+    loaded_costs = return_loaded_costs()
 
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
@@ -266,7 +308,10 @@ def logout():
 ######## App Startup ###########
 if __name__ == '__main__':
 
-    loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
+    #loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
+
+
+    """
 
     clients = {
     'Cetera Financial' : {'VMS_fee' : 0, 'discount' : 0 },
@@ -292,5 +337,5 @@ if __name__ == '__main__':
     'Wells Fargo' : {'VMS_fee' : .02, 'discount' : 0 }
 
     }
-
+    """
     app.run()
