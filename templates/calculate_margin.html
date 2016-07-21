@@ -1,10 +1,4 @@
 {% extends "base.html" %}
-
-
-{% block title %}
-Margin Calculator
-{% endblock %}
-
 {% block content %}
 
 <div class="container">
@@ -29,20 +23,13 @@ Margin Calculator
 						</div>
 				</form>
 				<div class="container">
-					<h4>Net Billing Rate: {{ "${:,.2f}".format(net_billing_rate) }} </h4>
-					<h4>Loaded Cost: {{ "${:,.2f}".format(loaded_cost) }}</h4>
-					<h4>Margin: {{ "${:,.2f}".format(margin_dollars) }}</h4>
+					<h4>Net Billing Rate: ${{ net_billing_rate }} </h4>
+					<h4>Loaded Cost: ${{ loaded_cost }}</h4>
+					<h4>Margin: ${{ margin_dollars }}</h4>
 					<h4>Margin: {{ margin_percent }}%</h4>
 				</div>
 		</div>
 	</div>
 </div>
-
-
-<footer>
-    <div class="container-fluid"> 
-        &copy; 2016 by Keyot, LLC. All Rights Reserved.
-    </div>
-</footer>
 
 {% endblock %}
