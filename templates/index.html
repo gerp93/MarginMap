@@ -8,9 +8,9 @@
 	<div class="jumbotron">
 		<div class="container">
 		<h1>Margin Math</h1>
+		{% if not current_user.is_authenticated %}
 		<p>Log in and choose a calculator to get started!</p>
 
-    {% if not current_user.is_authenticated %}
         {% from "_formhelpers.html" import render_field %}
         <div class="col-md-5">
             <form method='POST' action="/login" class="form-inline" role="form">
@@ -34,7 +34,7 @@
 {% endif %}
 
 <footer>
-    <div class="container-fluid" align="center"> 
+    <div class="container-fluid" align="center">
         &copy; 2016 by Keyot, LLC. All Rights Reserved.
     </div>
 </footer>

@@ -5,7 +5,6 @@ from wtforms import Form, BooleanField, TextField, PasswordField, validators, Fl
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
-from werkzeug.security import generate_password_hash, check_password_hash
 import decimal
 import random
 import locale
@@ -52,12 +51,6 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
-
-    def set_password(self, password):
-        self.pw_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.pw_hash, password)
 
 
 db.create_all()
@@ -125,14 +118,14 @@ def calculate_margin():
 
     if request.method == 'GET':
         return render_template('calculate_margin.html', form=form)
-        
-    
+
+
     billing_rate = form.billingRate.data
     pay_rate = form.payRate.data
     type = form.payType.data
     client = form.client.data
     print(form.client.data)
-   
+
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
 
@@ -143,24 +136,24 @@ def calculate_margin():
 
     elif type == "W2":
         loaded_cost = pay_rate * loaded_costs["W2"]
-    
+
     elif type == "Salary":
         loaded_cost = round((pay_rate / 2080) * loaded_costs["Salary"], 2)
-        
+
     margin_dollars = round(net_billing_rate - loaded_cost, 2)
     margin_percent = round((margin_dollars / net_billing_rate) * 100, 2)
 
     return render_template('calculate_margin.html', form=form, margin_dollars=margin_dollars, margin_percent=margin_percent, net_billing_rate=net_billing_rate, loaded_cost=loaded_cost)
 
 @app.route('/calculate_billing_rate', methods=['GET','POST'])
-#@login_required
+@login_required
 def calculate_billing_rate():
 
 
     form = BillingCalculate(request.form)
 
     if request.method == 'GET':
-        return render_template('calculate_billing_rate.html', form=form) 
+        return render_template('calculate_billing_rate.html', form=form)
 
 
     pay_rate = form.payRate.data
@@ -181,7 +174,7 @@ def calculate_billing_rate():
 
     elif type == "Salary":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
-        
+
     loaded_cost = round(loaded_cost, 2)
 
 
@@ -190,7 +183,7 @@ def calculate_billing_rate():
 
     else:
         billing_rate = loaded_cost / (1 - target_margin)
-        
+
     billing_rate = round(billing_rate, 2)
 
 
@@ -200,14 +193,14 @@ def calculate_billing_rate():
     return render_template('calculate_billing_rate.html', form=form, margin_dollars=margin_dollars, net_billing_rate=net_billing_rate, billing_rate=billing_rate, loaded_cost=loaded_cost)
 
 @app.route('/calculate_pay_rate', methods=['GET','POST'])
-#@login_required
+@login_required
 def calculate_pay_rate():
 
     form = PayCalculate(request.form)
-    
+
     if request.method == 'GET':
-        return render_template('calculate_pay_rate.html', form=form) 
-    
+        return render_template('calculate_pay_rate.html', form=form)
+
 
     billing_rate = form.billingRate.data
     type = form.payType.data
@@ -218,13 +211,13 @@ def calculate_pay_rate():
 
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
-    
-    
+
+
     if type == "Salary":
         pay_rate = (net_billing_rate * (1 - margin) / ((1 + rando(type)))) * 2080
     else:
         pay_rate = net_billing_rate * (1 - margin) / (1 + rando(type))
-        
+
     pay_rate = round(pay_rate, 2)
 
 
@@ -237,8 +230,8 @@ def calculate_pay_rate():
 
     elif type == "Salary":
         loaded_cost = pay_rate / 2080 * loaded_costs["Salary"]
-        
-    loaded_cost =  round(loaded_cost, 2) 
+
+    loaded_cost =  round(loaded_cost, 2)
 
     margin_dollars = round(net_billing_rate - loaded_cost, 2)
 
@@ -254,14 +247,11 @@ def login(*args):
             return render_template('login.html', error=error, form=form)
         error = False
         return render_template('login.html', form=form, valid_registration=valid_registration)
-        
-        
-    
     username = "keyot"
     password = form.password.data
     print(User.query.filter_by(username=username).all())
     registered_user = User.query.filter_by(username=username).first()
-    if registered_user.check_password(password) == False:
+    if registered_user is None:
         print("here")
         flash('Password is invalid' , 'error')
         error = True
@@ -269,7 +259,7 @@ def login(*args):
 
     login_user(registered_user)
     flash('Logged in successfully')
-    return redirect(request.args.get('next') or url_for('account'))
+    return redirect(request.args.get('next') or url_for('index'))
 
 @app.route('/logout')
 def logout():
@@ -278,7 +268,7 @@ def logout():
 
 ######## App Startup ###########
 if __name__ == '__main__':
-    
+
     loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
 
     clients = {
@@ -303,7 +293,7 @@ if __name__ == '__main__':
     'Unity Point' : {'VMS_fee' : 0, 'discount' : 0 },
     'Wellmark' : {'VMS_fee' : 0, 'discount' : 0 },
     'Wells Fargo' : {'VMS_fee' : .02, 'discount' : 0 }
-    
+
     }
 
     app.run()

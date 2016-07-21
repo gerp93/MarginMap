@@ -37,6 +37,7 @@
                 <li {% if request.endpoint == "calculate_margin" %} class="active" {% endif %}><a href="calculate_margin">Calculate Margin</a></li>
                 <li {% if request.endpoint == "calculate_billing_rate" %} class="active" {% endif %}><a href="calculate_billing_rate">Calculate Billing Rate</a></li>
                 <li {% if request.endpoint == "calculate_pay_rate" %} class="active" {% endif %}><a href="calculate_pay_rate">Calculate Pay Rate</a></li>
+                <li {% if request.endpoint == "logout" %} class="active" {% endif %}><a href="logout">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -49,18 +50,16 @@
 
 <body>
     <div id="content">{% block content %} <footer>
-        <div class="container-fluid"> 
+        <div class="container-fluid">
             &copy; 2016 by Keyot, LLC. All Rights Reserved.
         </div>
     </footer>{% endblock %}</div>
-    
-    
+
+
     <h1>HELLOOOOOO</h1>
-    
+
 
 
     </body>
-    
-</html> 
 
-
+</html>
