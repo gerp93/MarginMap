@@ -156,39 +156,49 @@ def calculate_margin():
 @app.route('/calculate_billing_rate', methods=['GET','POST'])
 #@login_required
 def calculate_billing_rate():
+
+
     form = BillingCalculate(request.form)
+
+    if request.method == 'GET':
+        return render_template('calculate_billing_rate.html', form=form) 
+
 
     pay_rate = form.payRate.data
     type = form.payType.data
-    target_margin = form.target_margin.data
+    target_margin = form.targetMargin.data
     client = form.client.data
-    VMS_fee = clients[client][VMS_fee]  ####
-    discount = clients[client][discount] ####
+    VMS_fee = clients[client]['VMS_fee']  ####
+    discount = clients[client]['discount'] ####
     total_discounts_and_fees = VMS_fee + discount
 
 
     if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
 
-    elif type == "Salary":
+    elif type == "W2":
         loaded_cost = pay_rate * loaded_costs["W2"]
 
 
-    elif type == "W2":
+    elif type == "Salary":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
+        
+    loaded_cost = round(loaded_cost, 2)
 
 
     if total_discounts_and_fees > 0:
         billing_rate = loaded_cost / (1 - (target_margin + total_discounts_and_fees))
 
-    elif total_discounts_and_fees < 0:
+    else:
         billing_rate = loaded_cost / (1 - target_margin)
+        
+    billing_rate = round(billing_rate, 2)
 
 
-    net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
-    margin_dollars = net_billing_rate - loaded_cost
+    net_billing_rate = round(billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount), 2)
+    margin_dollars = round(net_billing_rate - loaded_cost, 2)
 
-    return render_template('calculate_billing_rate.html', form=form)
+    return render_template('calculate_billing_rate.html', form=form, margin_dollars=margin_dollars, net_billing_rate=net_billing_rate, billing_rate=billing_rate, loaded_cost=loaded_cost)
 
 @app.route('/calculate_pay_rate', methods=['GET','POST'])
 #@login_required
