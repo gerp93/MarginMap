@@ -1,5 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
+
+
 <head>
 {% block head %}
 
@@ -27,7 +29,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="static/clippy.png"</a>
+            <a class="navbar-brand" href="/"><img src="static/logo.png"</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
@@ -46,15 +48,19 @@
 {% endblock %}
 
 <body>
-    <div id="content">{% block content %} {% endblock %}</div>
+    <div id="content">{% block content %} <footer>
+        <div class="container-fluid"> 
+            &copy; 2016 by Keyot, LLC. All Rights Reserved.
+        </div>
+    </footer>{% endblock %}</div>
     
     
-    {% block footer %}
+    <h1>HELLOOOOOO</h1>
     
-    {% endblock %}
-    
-    
+
 
     </body>
     
 </html> 
+
+

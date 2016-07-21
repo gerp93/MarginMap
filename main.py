@@ -84,7 +84,7 @@ class BillingCalculate(Form):
 class PayCalculate(Form):
     client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
     billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
-    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
+    margin = FloatField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 ##### Back End Decorators #####
@@ -166,7 +166,7 @@ def calculate_billing_rate():
 
     pay_rate = form.payRate.data
     type = form.payType.data
-    target_margin = form.targetMargin.data
+    target_margin = form.targetMargin.data / 100
     client = form.client.data
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
@@ -205,16 +205,29 @@ def calculate_billing_rate():
 def calculate_pay_rate():
 
     form = PayCalculate(request.form)
+    
+    if request.method == 'GET':
+        return render_template('calculate_pay_rate.html', form=form) 
+    
 
-    pay_rate = form.payRate.data
+    billing_rate = form.billingRate.data
     type = form.payType.data
-    target_margin = form.targetMargin.data
+    margin = form.margin.data / 100
     client = form.client.data
-    VMS_fee = clients[client][VMS_fee]  ####
-    discount = clients[client][discount] ####
+    VMS_fee = clients[client]['VMS_fee']  ####
+    discount = clients[client]['discount'] ####
 
 
-    #net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
+    net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
+    
+    
+    if type == "Salary":
+        pay_rate = (net_billing_rate * (1 - margin) / ((1 + rando(type)))) * 2080
+    else:
+        pay_rate = net_billing_rate * (1 - margin) / (1 + rando(type))
+        
+    pay_rate = round(pay_rate, 2)
+
 
     if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
@@ -224,17 +237,13 @@ def calculate_pay_rate():
         loaded_cost = pay_rate * loaded_costs["W2"]
 
     elif type == "Salary":
-        loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
+        loaded_cost = pay_rate / 2080 * loaded_costs["Salary"]
+        
+    loaded_cost =  round(loaded_cost, 2) 
 
+    margin_dollars = round(net_billing_rate - loaded_cost, 2)
 
-    if type == "Salary":
-        pay_rate = net_billing_rate * (1 - margin) / ((1 + rando(type)) * 2080)
-    else:
-        pay_rate = net_billing_rate * (1 - margin) / (1 + rando(type))
-
-    margin_dollars = net_billing_rate - loaded_cost
-
-    return render_template('calculate_pay_rate.html', form = form)
+    return render_template('calculate_pay_rate.html', form=form, margin_dollars=margin_dollars, pay_rate=pay_rate, loaded_cost=loaded_cost, net_billing_rate=net_billing_rate)
 
 @app.route('/login', methods=['GET','POST'])
 def login(*args):

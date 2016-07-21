@@ -1,4 +1,12 @@
 {% extends "base.html" %}
+
+{% block title %}
+Pay Rate Calculator
+{% endblock %}
+
+
+
+
 {% block content %}
 
 <div class="container">
@@ -11,7 +19,7 @@
 								<dl>
 									  {{ render_field(form.client) }}
 										{{ render_field(form.billingRate) }}
-										{{ render_field(form.targetMargin) }}
+										{{ render_field(form.margin) }}
 										{{ render_field(form.payType) }}
 								</dl>
 								<p><input type=submit value="Calculate">
@@ -23,13 +31,21 @@
 						</div>
 				</form>
 				<div class="container">
-					<h4>Net Billing Rate: $</h4>
-					<h4>Loaded Cost: $</h4>
-					<h4>Pay Rate: $</h4>
-					<h4>Margin ($):</h4>
+					<h4>Net Billing Rate: ${{net_billing_rate }}</h4>
+					<h4>Loaded Cost: ${{loaded_cost}}</h4>
+					<h4>Pay Rate: ${{ pay_rate }}</h4>
+					<h4>Margin ($): {{ margin_dollars }}</h4>
 				</div>
 		</div>
 	</div>
 </div>
+
+
+
+<footer>
+    <div class="container-fluid"> 
+        &copy; 2016 by Keyot, LLC. All Rights Reserved.
+    </div>
+</footer>
 
 {% endblock %}
