@@ -118,8 +118,7 @@ def rando(type):
         return .2
 
 @app.route('/calculate_margin', methods=['GET','POST'])
-
-#@login_required
+@login_required
 def calculate_margin():
 
     form = MarginCalculate(request.form)
@@ -255,6 +254,9 @@ def login(*args):
             return render_template('login.html', error=error, form=form)
         error = False
         return render_template('login.html', form=form, valid_registration=valid_registration)
+        
+        
+    
     username = "keyot"
     password = form.password.data
     print(User.query.filter_by(username=username).all())
