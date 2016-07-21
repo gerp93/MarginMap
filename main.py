@@ -59,9 +59,6 @@ db.create_all()
 class Login(Form):
     password = PasswordField('Password <br><i>(Case Sensitive)</i>:', [validators.InputRequired(message=None)])
 
-class Margin(Form):
-    pass
-
 class MarginCalculate(Form):
     client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
     billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
