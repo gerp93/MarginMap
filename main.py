@@ -152,14 +152,14 @@ def calculate_margin():
     if request.method == 'GET':
         return render_template('calculate_margin.html', form=form)
 
-
+    clients = return_clients()
+    loaded_costs = return_loaded_costs()
     billing_rate = form.billingRate.data
     pay_rate = form.payRate.data
     type = form.payType.data
     client = form.client.data
     print(form.client.data)
-    clients = return_clients()
-    loaded_costs = return_loaded_costs()
+
 
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
@@ -190,7 +190,8 @@ def calculate_billing_rate():
     if request.method == 'GET':
         return render_template('calculate_billing_rate.html', form=form)
 
-
+    clients = return_clients()
+    loaded_costs = return_loaded_costs()
     pay_rate = form.payRate.data
     type = form.payType.data
     target_margin = form.targetMargin.data / 100
@@ -198,8 +199,7 @@ def calculate_billing_rate():
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
     total_discounts_and_fees = VMS_fee + discount
-    clients = return_clients()
-    loaded_costs = return_loaded_costs()
+    
 
 
     if type == "IC":
@@ -238,15 +238,15 @@ def calculate_pay_rate():
     if request.method == 'GET':
         return render_template('calculate_pay_rate.html', form=form)
 
-
+    clients = return_clients()
+    loaded_costs = return_loaded_costs()
     billing_rate = form.billingRate.data
     type = form.payType.data
     margin = form.margin.data / 100
     client = form.client.data
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
-    clients = return_clients()
-    loaded_costs = return_loaded_costs()
+ 
 
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
