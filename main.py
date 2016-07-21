@@ -1,7 +1,7 @@
 ############## Imports #################
 from flask import Flask, render_template, redirect, request, url_for, g, session, flash, abort
 from flask_bootstrap import Bootstrap
-from wtforms import Form, BooleanField, TextField, PasswordField, validators, DecimalField, SelectField
+from wtforms import Form, BooleanField, TextField, PasswordField, validators, FloatField, SelectField
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
@@ -71,20 +71,20 @@ class Margin(Form):
 
 class MarginCalculate(Form):
     client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
-    billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
-    payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
+    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class BillingCalculate(Form):
     client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
-    targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
-    payRate = DecimalField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
+    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
+    payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 class PayCalculate(Form):
     client = SelectField(u'Client:', choices=[('Cetera Financial', 'Cetera Financial'), ('DiTech', 'DiTech'), ('Fairview', 'Fairview'), ('Farm Bureau', 'Farm Bureau'), ('Guide One', 'Guide One'),('Hy-Vee', 'Hy-Vee'),('Integrated Behavior Health Network', 'Integrated Behavior Health Network'),('Lifespace Communities', 'Lifespace Communities'),('Lifetouch', 'Lifetouch'), ('Merrill', 'Merrill'), ('MoneyGram', 'MoneyGram'), ('Nationstar', 'Nationstar'), ('Pioneer', 'Pioneer'), ('Hybrid', 'Hybrid'), ('Prime', 'Prime'), ('Principal Financial', 'Principal Financial'), ('Securian', 'Securian'), ('State of Iowa', 'State of Iowa'), ('State of Minnesota', 'State of Minnesota'), ('Unity Point Wellmark', 'Unity Point Wellmark'), ('Wells Fargo', 'Wells Fargo')])
-    billingRate = DecimalField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
-    targetMargin = DecimalField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
+    targetMargin = FloatField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
 ##### Back End Decorators #####
@@ -133,7 +133,7 @@ def calculate_margin():
     type = form.payType.data
     client = form.client.data
     print(form.client.data)
-    print(clients[client]['VMS_fee'])
+   
     VMS_fee = clients[client]['VMS_fee']  ####
     discount = clients[client]['discount'] ####
 
@@ -142,14 +142,14 @@ def calculate_margin():
     if type == "IC":
         loaded_cost = pay_rate * loaded_costs["IC"]
 
-    elif type == "Salary":
-        loaded_cost = float(pay_rate) * loaded_costs["W2"] ########
-
     elif type == "W2":
-        loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
-
-    margin_dollars = float(net_billing_rate) / loaded_cost
-    margin_percent = margin_dollars / loaded_cost
+        loaded_cost = pay_rate * loaded_costs["W2"]
+    
+    elif type == "Salary":
+        loaded_cost = round((pay_rate / 2080) * loaded_costs["Salary"], 2)
+        
+    margin_dollars = round(net_billing_rate - loaded_cost, 2)
+    margin_percent = round((margin_dollars / net_billing_rate) * 100, 2)
 
     return render_template('calculate_margin.html', form=form, margin_dollars=margin_dollars, margin_percent=margin_percent, net_billing_rate=net_billing_rate, loaded_cost=loaded_cost)
 
@@ -210,10 +210,10 @@ def calculate_pay_rate():
         loaded_cost = pay_rate * loaded_costs["IC"]
 
 
-    elif type == "Salary":
+    elif type == "W2":
         loaded_cost = pay_rate * loaded_costs["W2"]
 
-    elif type == "W2":
+    elif type == "Salary":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
 
 
@@ -257,12 +257,13 @@ def logout():
 
 ######## App Startup ###########
 if __name__ == '__main__':
+    
     loaded_costs = {"W2" : 1.2, "Salary" : 1.4, "IC" : 1.01}
 
     clients = {
     'Cetera Financial' : {'VMS_fee' : 0, 'discount' : 0 },
-    'DiTech' : {'VMS_fee' : 3.00, 'discount' : 0 },
-    'Fairview' : {'VMS_fee' : 3.00, 'discount' : 0 },
+    'DiTech' : {'VMS_fee' : .03, 'discount' : 0 },
+    'Fairview' : {'VMS_fee' : .03, 'discount' : 0 },
     'Farm Bureau' : {'VMS_fee' : 0, 'discount' : 0 },
     'Guide One' : {'VMS_fee' : 0, 'discount' : 0 },
     'Hy-Vee' : {'VMS_fee' : 0, 'discount' : 0 },
@@ -271,16 +272,16 @@ if __name__ == '__main__':
     'Lifetouch' : {'VMS_fee' : 0, 'discount' : 0 },
     'Merrill' : {'VMS_fee' : 0, 'discount' : 0 },
     'MoneyGram' : {'VMS_fee' : 0, 'discount' : 0 },
-    'Nationstar' : {'VMS_fee' : 2.95, 'discount' : 0 },
+    'Nationstar' : {'VMS_fee' : .0295, 'discount' : 0 },
     'Pioneer Hybrid' : {'VMS_fee' : 0, 'discount' : 0 },
-    'Prime' : {'VMS_fee' : 0, 'discount' : 3.00 },
+    'Prime' : {'VMS_fee' : 0, 'discount' : .03 },
     'Principal Financial' : {'VMS_fee' : 0, 'discount' : 0 },
     'Securian' : {'VMS_fee' : 0, 'discount' : 0 },
-    'State of Iowa' : {'VMS_fee' : 0, 'discount' : 1.00 },
-    'State of Minnesota' : {'VMS_fee' : 0, 'discount' : 1.00 },
+    'State of Iowa' : {'VMS_fee' : 0, 'discount' : .01 },
+    'State of Minnesota' : {'VMS_fee' : 0, 'discount' : .01 },
     'Unity Point' : {'VMS_fee' : 0, 'discount' : 0 },
     'Wellmark' : {'VMS_fee' : 0, 'discount' : 0 },
-    'Wells Fargo' : {'VMS_fee' : 2.00, 'discount' : 0 }
+    'Wells Fargo' : {'VMS_fee' : .02, 'discount' : 0 }
     
     }
 
