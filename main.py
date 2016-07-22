@@ -5,7 +5,7 @@ from wtforms import Form, BooleanField, TextField, PasswordField, validators, Fl
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
-from helpers import * 
+from helpers import *
 import decimal
 import random
 import locale
@@ -52,7 +52,7 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
-        
+
 db.create_all()
 
 ############## WTForms Classes #######################
@@ -61,7 +61,7 @@ class Login(Form):
 
 class MarginCalculate(Form):
     client = SelectField(u'Client:', choices=client_selection_helper())
-    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.01)
     payRate = FloatField('Pay Rate:', [validators.InputRequired(message=None)], default=58000)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
@@ -73,7 +73,7 @@ class BillingCalculate(Form):
 
 class PayCalculate(Form):
     client = SelectField(u'Client:', choices= client_selection_helper())
-    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.00)
+    billingRate = FloatField('Billing Rate:', [validators.InputRequired(message=None)], default=55.01)
     margin = FloatField('Target Margin:', [validators.InputRequired(message=None)], default=26.86)
     payType = SelectField(u'Pay Type:', choices=[('Salary','Salary'), ('W2', 'W2'), ('IC', 'IC')], default="Salary")
 
@@ -86,26 +86,26 @@ def before_request():
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
-    
+
 ##### Additional Functions ######
 
 def rando(type):
     if type == "IC":
         return .01
-    
+
     elif type == "Salary":
         return .4
-    
+
     elif type == "W2":
         return .2
 
 
 def dollars(arg):
-    try: 
-        arg = float(arg) 
+    try:
+        arg = float(arg)
         return str(locale.currency(arg, symbol=True, grouping=True))
     except:
-        return "None" 
+        return "None"
 
 
 def percent(arg):
@@ -130,8 +130,8 @@ def calculate_margin():
 
     if request.method == 'GET':
         return render_template('calculate_margin.html', form=form)
-        
-        
+
+
     results = []
 
     clients = clients_helper()
@@ -143,8 +143,8 @@ def calculate_margin():
     print(form.client.data)
 
 
-    VMS_fee = clients[client]['VMS_fee']  
-    discount = clients[client]['discount'] 
+    VMS_fee = clients[client]['VMS_fee']
+    discount = clients[client]['discount']
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
 
@@ -156,7 +156,7 @@ def calculate_margin():
 
     elif type == "Salary":
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
-        
+
 
     margin_dollars = net_billing_rate - loaded_cost
     margin_percent = (margin_dollars / net_billing_rate) * 100
@@ -179,10 +179,10 @@ def calculate_billing_rate():
     type = form.payType.data
     target_margin = form.targetMargin.data / 100
     client = form.client.data
-    VMS_fee = clients[client]['VMS_fee']  
-    discount = clients[client]['discount'] 
+    VMS_fee = clients[client]['VMS_fee']
+    discount = clients[client]['discount']
     total_discounts_and_fees = VMS_fee + discount
-    
+
 
 
     if type == "IC":
@@ -196,7 +196,7 @@ def calculate_billing_rate():
         loaded_cost = (pay_rate / 2080) * loaded_costs["Salary"]
 
 
-    
+
     if total_discounts_and_fees > 0:
         print(target_margin + total_discounts_and_fees)
         print( str(loaded_cost), str(target_margin), str(total_discounts_and_fees))
@@ -208,8 +208,8 @@ def calculate_billing_rate():
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
     margin_dollars = net_billing_rate - loaded_cost
-    
-    
+
+
 
     return render_template('calculate_billing_rate.html', form=form, margin_dollars=dollars(margin_dollars), net_billing_rate=dollars(net_billing_rate), billing_rate=dollars(billing_rate), loaded_cost=dollars(loaded_cost))
 
@@ -228,8 +228,8 @@ def calculate_pay_rate():
     type = form.payType.data
     margin = form.margin.data / 100
     client = form.client.data
-    VMS_fee = clients[client]['VMS_fee']  
-    discount = clients[client]['discount']  
+    VMS_fee = clients[client]['VMS_fee']
+    discount = clients[client]['discount']
 
     net_billing_rate = billing_rate - (billing_rate * VMS_fee) - (billing_rate * discount)
 
