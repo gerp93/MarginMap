@@ -6,19 +6,19 @@
 
 <div class="container">
 	<div class="jumbotron">
-		<div class="container">
+		<div align="center" class="container">
 		<h1>Margin Math</h1>
 		{% if not current_user.is_authenticated %}
 		<p>Log in and choose a calculator to get started!</p>
 
         {% from "_formhelpers.html" import render_field %}
-        <div class="col-md-5">
-            <form method='POST' action="/login" class="form-inline" role="form">
+        <div>
+            <form method='POST' action="/login" role="form">
                 <div class="form-group">
                     <dl>
                         {{ render_field(form.password) }}
                     </dl>
-                    <p><input type=submit value="Sign In">
+                    <input type=submit value="Sign In">
                                 {% if error == True %}
                                 <div class="alert alert-danger">
                                     That password is incorrect.

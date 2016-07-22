@@ -8,10 +8,13 @@
 
     {% if not current_user.is_authenticated %}
 
-    <div class="col-sm-4">
+    <div align="center">
 
         {% from "_formhelpers.html" import render_field %}
-        <div class="col-md-5">
+        <div align="center">
+          <h1>Login</h1>
+          </br>
+          </br>
             <form method='POST' action="/login" class="form-inline" role="form">
                 <div class="form-group">
                     <dl>
