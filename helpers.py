@@ -18,7 +18,8 @@ def client_selection_helper():
         ('Securian', 'Securian'), 
         ('State of Iowa', 'State of Iowa'), 
         ('State of Minnesota', 'State of Minnesota'), 
-        ('Unity Point', 'Wellmark'), 
+        ('Unity Point', 'Unity Point'),
+        ('Wellmark', 'Wellmark'),
         ('Wells Fargo', 'Wells Fargo')#,
         #('New Client Name', 'New Client Name')
         ]
